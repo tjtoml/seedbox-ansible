@@ -1,21 +1,41 @@
 ---
-- name: Download Pydio
-  get_url: url="http://sourceforge.net/projects/ajaxplorer/files/latest/download?source=files" dest=/tmp/pydio.zip
+- name: add pydio repo
+  apt_repository: 
+    repo: "deb http://dl.ajaxplorer.info/repos/apt stable main"
+    state: present  
 
-- name: Ensure pydio directory is there 
-  file: path=/var/www/pydio state=directory mode=0775 owner=www-data group=www-data 
+- name: add pydio src repo
+  apt_repository: 
+  repo: "deb-src http://dl.ajaxplorer.info/repos/apt stable main"
+    state: present
 
-- name: Extract pydio
-  command: "/usr/bin/bsdtar -xf /tmp/pydio.zip --strip-components 1"
-  args:
-    creates: /var/www/pydio/index.php
-    chdir: /var/www/pydio 
+- name: add pydio key 
+  apt_key:
+  url: http://dl.ajaxplorer.info/repos/charles@ajaxplorer.info.gpg.key
+  state: present 
 
-- name: Write .htaccess file
-  copy: dest=/var/www/pydio/.htaccess src=.htaccess 
+- name: Install packages
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - pydio
   
-- name: Ensure data directory is there 
-  file: path=/var/www/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
+# - name: Download Pydio
+  # get_url: url="http://sourceforge.net/projects/ajaxplorer/files/latest/download?source=files" dest=/tmp/pydio.zip
+
+# - name: Ensure pydio directory is there 
+  # file: path=/var/www/pydio state=directory mode=0775 owner=www-data group=www-data 
+
+# - name: Extract pydio
+  # command: "/usr/bin/bsdtar -xf /tmp/pydio.zip --strip-components 1"
+  # args:
+    # creates: /var/www/pydio/index.php
+    # chdir: /var/www/pydio 
+
+# - name: Write .htaccess file
+  # copy: dest=/var/www/pydio/.htaccess src=.htaccess 
+  
+# - name: Ensure data directory is there 
+  # file: path=/var/www/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
 
 - name: Write encoding file
   copy: dest=/var/www/pydio/data/plugins/boot.conf/encoding.php src=encoding.php 

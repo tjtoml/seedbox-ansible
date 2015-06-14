@@ -1,0 +1,17 @@
+# nginx
+---
+- name: Add php5 PPA
+  apt_repository: repo='ppa:ondrej/php5'
+
+- name: Install packages
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+	- nginx
+	- ssl-cert
+	- php5
+    - php5-fpm
+    - php5-curl
+    - php5-gd
+    - php5-geoip
+    - php5-mcrypt
+    - php5-mysql

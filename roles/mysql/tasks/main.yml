@@ -1,4 +1,26 @@
+#MySQL 
 ---
+- name: Set MySQL root password
+  debconf: 
+    name: mysql-server 
+    question: mysql-server/root_password 
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Confirm MySQL root password
+  debconf: 
+    name: mysql-server 
+    question: mysql-server/root_password_again 
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Install packages
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+  
 - name: Create MySQL database {{ mysql_db_name }} 
   mysql_db: 
     name: "{{ mysql_db_name }}"
