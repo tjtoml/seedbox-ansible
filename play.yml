@@ -16,7 +16,7 @@
     web_password: CHANGEME        
   roles:
      - common
-     - webserver
+     - apache2
      - mysql
      - xmlrpc
      - pydio

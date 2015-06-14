@@ -12,6 +12,21 @@
   apt_repository: 
     repo: "deb http://apt.sonarr.tv/ master main"
     state: present  
+            
+- name: add pydio repo
+  apt_repository: 
+    repo: "deb http://dl.ajaxplorer.info/repos/apt stable main"
+    state: present  
+
+- name: add pydio src repo
+  apt_repository: 
+  repo: "deb-src http://dl.ajaxplorer.info/repos/apt stable main"
+    state: present
+
+- name: add pydio key 
+  apt_key:
+  url: http://dl.ajaxplorer.info/repos/charles@ajaxplorer.info.gpg.key
+  state: present 
 
 - name: Set MySQL root password
   debconf: 
