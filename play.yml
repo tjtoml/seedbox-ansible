@@ -15,13 +15,13 @@
     web_user: tjtoml
     web_password: CHANGEME        
   roles:
-     - common
-     - nginx
-     - mysql
-     - pydio
-     # - xmlrpc
+     #- common
+    - nginx
+     #- mysql
+     #- pydio
+     #    - xmlrpc
      # - libtorrent
-     # - rTorrent
-     # - ruTorrent  
-     # - sonarr 
-     # - couchpotato  
+     #- rTorrent
+    - ruTorrent  
+    - sonarr 
+    - couchpotato  

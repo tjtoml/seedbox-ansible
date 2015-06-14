@@ -18,7 +18,8 @@
   apt: pkg={{ item }} state=installed update_cache=yes
   with_items:
     - pydio
-  
+  tags:
+    - skip_after_first_run
 # - name: Download Pydio
   # get_url: url="http://sourceforge.net/projects/ajaxplorer/files/latest/download?source=files" dest=/tmp/pydio.zip
 
@@ -34,8 +35,8 @@
 # - name: Write .htaccess file
   # copy: dest=/var/www/pydio/.htaccess src=.htaccess 
   
-# - name: Ensure data directory is there 
-  # file: path=/var/www/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
+- name: Ensure data directory is there 
+  file: path=/usr/share/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
 
 - name: Write encoding file
   copy: dest=/usr/share/pydio/data/plugins/boot.conf/encoding.php src=encoding.php 
@@ -101,8 +102,8 @@
 - name: Ensure cache directory is there 
   file: path=/usr/share/pydio/data/cache state=directory mode=0775 owner=www-data group=www-data 
 
-# - name: Override first run
-  # file: path=/usr/share/pydio/data/cache/first_run_passed state=directory mode=0775 owner=www-data group=www-data 
+- name: Override first run
+  file: path=/usr/share/pydio/data/cache/first_run_passed state=directory mode=0775 owner=www-data group=www-data 
 
 - name: Create torrent directory in pydio web dir
   file:
@@ -140,7 +141,8 @@
     - watch/software
     - watch/tv
     - watch/tv/sonarr
-
+  tags:
+    - skip_after_first_run
 - name: Change /usr/share/pydio permissions
   file: path=/usr/share/pydio state=directory mode=5775 owner=www-data group=www-data recurse=yes
-  notify: restart apache2 
+  notify: restart nginx 

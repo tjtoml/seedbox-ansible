@@ -1,4 +1,4 @@
-# This is an example resource file for rTorrent. Copy to
+	# This is an example resource file for rTorrent. Copy to
 # ~/.rtorrent.rc and enable/modify the options as needed. Remember to
 # uncomment the options you wish to enable.
 
@@ -99,5 +99,4 @@ protocol.pex.set = yes
 #hash_max_tries = 10
 
 #log.execute=/tmp/exec.log
-scgi_port = 127.0.0.1:5000
-execute2 = {sh,-c,/usr/bin/php /var/www/rutorrent/php/initplugins.php {{ pydio_username }} &}
+

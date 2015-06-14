@@ -6,6 +6,7 @@
 - name: Install packages
   apt: pkg={{ item }} state=installed update_cache=yes
   with_items:
+    - apache2-utils     
     - nginx
     - ssl-cert
     - php5
@@ -15,3 +16,24 @@
     - php5-geoip
     - php5-mcrypt
     - php5-mysql
+  tags:
+    - skip_after_first_run
+
+- name: turn off PHP output buffering
+  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
+
+- name: set open_basedir
+  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
+
+- name: Apply config template
+  template:
+    src: nginx-ssl.conf
+    dest: "/etc/nginx/sites-available/{{ hostname }}.{{ domain }}"
+
+- name: Enable nginx conf
+  file: 
+    path: "/etc/nginx/sites-enabled/{{ hostname }}.{{ domain }}"
+    state: link
+    src: "/etc/nginx/sites-available/{{ hostname }}.{{ domain }}"
+  notify: restart nginx
+  notify: restart php5-fpm     

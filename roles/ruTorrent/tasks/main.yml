@@ -1,28 +1,33 @@
 ---
 - name: copy ruTorrent update script
-  copy: src=update-rutorrent dest=/usr/local/bin/update-rutorrent mode=0777
+  copy: src=update-rutorrent dest=/usr/local/bin/update-rutorrent mode=0777 force=yes
 
-- name: Download ruTorrent to /var/www/pydio/rutorrent
+- name: Make ruTorrent directory
+  file:
+    name: /var/www/rutorrent/plugins
+    state: directory 
+
+- name: Download ruTorrent to /var/www/rutorrent
   command: /usr/local/bin/update-rutorrent
   args:
-    creates: /var/www/pydio/rutorrent
+    creates: /var/www/rutorrent/conf
 
 - name: Apply config template
-  template: src=config.php dest=/var/www/pydio/rutorrent/conf/config.php owner=www-data group=www-data 
+  template: src=config.php dest=/var/www/rutorrent/conf/config.php owner=www-data group=www-data 
 
 - name: Copy autowatch config file
-  copy: src=autotools-conf.php dest=/var/www/pydio/rutorrent/plugins/autotools/conf.php force=yes 
+  copy: src=autotools-conf.php dest=/var/www/rutorrent/plugins/autotools/conf.php force=yes 
   
 - name: Copy autowatch config file
-  copy: src=screenshots-conf.php dest=/var/www/pydio/rutorrent/plugins/screenshots/conf.php force=yes 
+  copy: src=screenshots-conf.php dest=/var/www/rutorrent/plugins/screenshots/conf.php force=yes 
 
 - name: Copy unpack config file 
-  copy: src=unpack-conf.php dest=/var/www/pydio/rutorrent/plugins/unpack/conf.php force=yes 
+  copy: src=unpack-conf.php dest=/var/www/rutorrent/plugins/unpack/conf.php force=yes 
 
 - name: Create password
-  command: "htpasswd -cb /etc/apache2/passwd {{ web_user }} {{ web_password }}"  
+  command: "htpasswd -cb /etc/nginx/passwd {{ web_user }} {{ web_password }}"  
   args:
-    creates: /etc/apache2/passwd
+    creates: /etc/nginx/passwd
 
 - name: Copy over html files
   copy: src=auth.tar.gz dest=/tmp/auth.tar.gz
@@ -30,5 +35,5 @@
 - name: Extract auth components
   command: "/usr/bin/bsdtar -xf /tmp/auth.tar.gz --strip-components 1"
   args:
-    creates: /var/www/pydio/login.html
-    chdir: /var/www/pydio 
+    creates: /usr/share/pydio/login.html
+    chdir: /usr/share/

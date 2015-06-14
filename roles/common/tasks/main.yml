@@ -1,6 +1,8 @@
 ---
 - name: Add ffmpeg PPA
   apt_repository: repo='ppa:kirillshkrogalev/ffmpeg-next'
+  tags:
+    - skip_after_first_run
 
 - name: Install packages
   apt: pkg={{ item }} state=installed update_cache=yes
@@ -20,4 +22,7 @@
     - subversion
     - zip
     - unrar-free
-    - unzip
+    - unzip 
+  tags:
+    - skip_after_first_run
+
