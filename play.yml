@@ -19,9 +19,9 @@
      - nginx
      - mysql
      - pydio
-     - xmlrpc
-     - libtorrent
-     - rTorrent
-     - ruTorrent  
-     - sonarr 
-     - couchpotato  
+     # - xmlrpc
+     # - libtorrent
+     # - rTorrent
+     # - ruTorrent  
+     # - sonarr 
+     # - couchpotato  
