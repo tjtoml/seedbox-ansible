@@ -22,18 +22,18 @@
 - name: turn off PHP output buffering
   ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
 
-- name: set open_basedir
-  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
+#- name: set cgi.fix_pathinfo
+#  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
 
 - name: Apply config template
   template:
     src: nginx-ssl.conf
-    dest: "/etc/nginx/sites-available/{{ hostname }}.{{ domain }}"
+    dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
 
 - name: Enable nginx conf
   file: 
-    path: "/etc/nginx/sites-enabled/{{ hostname }}.{{ domain }}"
+    path: "/etc/nginx/sites-enabled/{{ inventory_hostname }}"
     state: link
-    src: "/etc/nginx/sites-available/{{ hostname }}.{{ domain }}"
+    src: "/etc/nginx/sites-available/{{ inventory_hostname }}"
   notify: restart nginx
   notify: restart php5-fpm     
