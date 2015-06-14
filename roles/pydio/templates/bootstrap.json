@@ -1,0 +1,32 @@
+{
+  "core.conf":{
+    "UNIQUE_INSTANCE_CONFIG":{
+      "instance_name":"conf.sql",
+      "group_switch_value":"conf.sql",
+      "SQL_DRIVER":{
+        "core_driver":"core",
+        "group_switch_value":"core"
+      }
+    },
+    "AJXP_CLI_SECRET_KEY":"{{ lookup('password', 'tmp/passwordfile chars=ascii_letters length=24') }}",
+    "DIBI_PRECONFIGURATION":{
+      "mysql_username":"pydio",
+      "mysql_use_mysqli":true,
+      "mysql_password":"{{ mysql_db_user_pass }}",
+      "mysql_host":"localhost",
+      "mysql_driver":"mysql",
+      "mysql_database":"{{ mysql_db_name }}",
+      "group_switch_value":"mysql"
+    }
+  },
+  "core.auth":{
+    "MASTER_INSTANCE_CONFIG":{
+      "instance_name":"auth.sql",
+      "group_switch_value":"auth.sql",
+      "SQL_DRIVER":{
+        "core_driver":"core",
+        "group_switch_value":"core"
+      }
+    }
+  }
+}

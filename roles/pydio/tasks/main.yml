@@ -1,0 +1,126 @@
+---
+- name: Download Pydio
+  get_url: url="http://sourceforge.net/projects/ajaxplorer/files/latest/download?source=files" dest=/tmp/pydio.zip
+
+- name: Ensure pydio directory is there 
+  file: path=/var/www/pydio state=directory mode=0775 owner=www-data group=www-data 
+
+- name: Extract pydio
+  command: "/usr/bin/bsdtar -xf /tmp/pydio.zip --strip-components 1"
+  args:
+    creates: /var/www/pydio/index.php
+    chdir: /var/www/pydio 
+
+- name: Write .htaccess file
+  copy: dest=/var/www/pydio/.htaccess src=.htaccess 
+  
+- name: Ensure data directory is there 
+  file: path=/var/www/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
+
+- name: Write encoding file
+  copy: dest=/var/www/pydio/data/plugins/boot.conf/encoding.php src=encoding.php 
+
+- name: Write bootstrap.json
+  template: src=bootstrap.json dest=/var/www/pydio/data/plugins/boot.conf/bootstrap.json 
+
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /var/www/pydio/plugins/log.sql/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /var/www/pydio/plugins/auth.sql/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /var/www/pydio/plugins/feed.sql/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /var/www/pydio/plugins/meta.syncable/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /var/www/pydio/plugins/conf.sql/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+- name: Create admin user template
+  template: src=admin.sql dest=/tmp/admin.sql
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /tmp/admin.sql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"
+  ignore_errors: yes
+
+- name: Ensure cache directory is there 
+  file: path=/var/www/pydio/data/cache state=directory mode=0775 owner=www-data group=www-data 
+
+- name: Override first run
+  file: path=/var/www/pydio/data/cache/first_run_passed state=directory mode=0775 owner=www-data group=www-data 
+
+- name: Create torrent directory in pydio web dir
+  file:
+    path: /var/www/pydio/data/personal/{{ pydio_username }}/torrents
+    mode: 0755
+    owner: www-data
+    group: www-data
+    state: directory
+
+- name: Create directory structure
+  file: path=/var/www/pydio/data/personal/{{ pydio_username }}/torrents/{{ item }} state=directory 
+  with_items: 
+    - complete
+    - complete/game
+    - complete/movie
+    - complete/movie/couchpotato
+    - complete/music
+    - complete/other
+    - complete/software
+    - complete/tv
+    - complete/tv/sonarr
+    - download
+    - download/game
+    - download/movie
+    - download/movie/couchpotato
+    - download/music
+    - download/software
+    - download/tv
+    - download/tv/sonarr
+    - watch
+    - watch/game
+    - watch/movie
+    - watch/movie/couchpotato
+    - watch/music
+    - watch/software
+    - watch/tv
+    - watch/tv/sonarr
+
+- name: Change /var/www/pydio permissions
+  file: path=/var/www/pydio state=directory mode=5775 owner=www-data group=www-data recurse=yes
+  notify: restart apache2 

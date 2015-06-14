@@ -1,0 +1,37 @@
+---
+- name: Clone RuudBurger/CouchPotatoServer
+  git:
+    repo: "https://github.com/RuudBurger/CouchPotatoServer.git"
+    dest: /usr/local/sbin/couchpotato
+
+- name: Move init script
+  file: 
+    src: /usr/local/sbin/couchpotato/init/ubuntu 
+    path: /etc/init.d/couchpotato
+    state: link
+    mode: 0755
+
+- name: Apply template to /etc/default/couchpotato
+  template: 
+    src: ubuntu.default
+    dest: /etc/default/couchpotato
+    mode: 0755
+
+- name: Update rc.d
+  command: update-rc.d couchpotato defaults  
+
+- name: start couchpotato
+  service: name=couchpotato state=started
+
+- name: stop couchpotato          
+  service: name=couchpotato state=stopped
+
+
+- name: update path in config ini
+  ini_file: dest=/var/opt/couchpotato/settings.conf section=core option=url_base value=couchpotato
+
+- name: Override first run wizard
+  ini_file: dest=/var/opt/couchpotato/settings.conf section=core option=show_wizard value=0
+
+- name: start couchpotato
+  service: name=couchpotato state=started

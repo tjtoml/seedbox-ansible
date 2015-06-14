@@ -1,0 +1,1 @@
+<?php $ROOT_ENCODING='en_US.UTF-8';

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "rutorrent"
+AuthUserFile  "/var/www/pydio/rutorrent/.htpasswd"
+require valid-user

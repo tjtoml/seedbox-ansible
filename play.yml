@@ -1,0 +1,27 @@
+---
+- hosts: all
+  remote_user: root
+  vars:
+    mysql_root_password: CHANGEME
+    mysql_db_name: pydio
+    mysql_db_user: pydio
+    mysql_db_user_pass: CHANGEME
+    pydio_username: tjtoml
+    domain: lugnuthead.me
+    hostname: '{{ inventory_hostname }}'
+    https_port: 443
+    run_user: rtorrent
+    session_password: RANDOMSTRINGOFTEXT        
+    web_user: tjtoml
+    web_password: CHANGEME        
+  roles:
+     - common
+     - webserver
+     - mysql
+     - xmlrpc
+     - pydio
+     - libtorrent
+     - rTorrent
+     - ruTorrent  
+     - sonarr 
+     - couchpotato  

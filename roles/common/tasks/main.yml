@@ -1,0 +1,60 @@
+---
+- name: Add php5 PPA
+  apt_repository: repo='ppa:ondrej/php5'
+
+- name: Add ffmpeg PPA
+  apt_repository: repo='ppa:kirillshkrogalev/ffmpeg-next'
+
+- name: Add nzbdrone key
+  command: "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC"
+
+- name: add nzbdrone repo
+  apt_repository: 
+    repo: "deb http://apt.sonarr.tv/ master main"
+    state: present  
+
+- name: Set MySQL root password
+  debconf: 
+    name: mysql-server 
+    question: mysql-server/root_password 
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Confirm MySQL root password
+  debconf: 
+    name: mysql-server 
+    question: mysql-server/root_password_again 
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Install packages
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - apache2
+    - apache2-utils
+    - automake
+    - build-essential
+    - bsdtar  
+    - curl
+    - git-core
+    - libapache2-mod-php5
+    - libav-tools
+    - libcppunit-dev
+    - libcurl4-openssl-dev
+    - libncurses5-dev
+    - libsigc++-2.0-dev
+    - libtool
+    - mediainfo
+    - mysql-server
+    - nzbdrone 
+    - php5
+    - php5-curl
+    - php5-gd
+    - php5-geoip
+    - php5-mcrypt
+    - php5-mysql
+    - python-mysqldb
+    - subversion
+    - zip
+    - unrar-free
+    - unzip

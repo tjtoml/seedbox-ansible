@@ -1,0 +1,72 @@
+---
+- name: git clone rakshasa/rtorrent
+  git: 
+    repo: "https://github.com/rakshasa/rtorrent.git"
+    dest: /usr/src/rtorrent
+
+- name: Autogen rtorrent
+  command: "/bin/sh autogen.sh"
+  args: 
+    chdir: /usr/src/rtorrent
+    creates: /usr/src/rtorrent/configure
+
+- name: Configure rtorrent
+  command: "/bin/sh configure --with-xmlrpc-c"
+  args:
+    chdir: /usr/src/rtorrent
+    creates: /usr/src/rtorrent/Makefile
+
+- name: Make rtorrent (Another long one) 
+  command: "/usr/bin/make"
+  args:
+    chdir: /usr/src/rtorrent
+    creates: /usr/src/rtorrent/src/rtorrent
+
+- name: Install rtorrent
+  command: "/usr/bin/make install"
+  args:
+    chdir: /usr/src/rtorrent
+    creates: /usr/local/bin/rtorrent
+
+- name: ldconfig
+  command: "/sbin/ldconfig"
+
+- name: Create group
+  group:
+    name: "{{ run_user }}"
+    state: present 
+
+- name: Create user
+  user: 
+    name: "{{ run_user }}"
+    system: yes
+    home: /etc/rtorrent
+    group: "{{ run_user }}"
+    groups: www-data        
+
+- name: Create config directory /etc/rtorrent
+  file:
+    path: /etc/rtorrent
+    state: directory
+    mode: 0755
+    owner: "{{ run_user }}"
+    group: "{{ run_user }}"
+
+- name: Apply config template
+  template:
+    src: rtorrent.rc
+    dest: /etc/rtorrent/rtorrent.rc
+
+
+- name: Create session directory
+  file:
+    path: /etc/rtorrent/session
+    mode: 0755
+    owner: "{{ run_user }}"
+    group: "{{ run_user }}"
+    state: directory
+
+- name: apply init script template
+  template: src=rtorrent.conf dest=/etc/init/rtorrent.conf
+
+
