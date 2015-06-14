@@ -6,13 +6,13 @@
 
 - name: add pydio src repo
   apt_repository: 
-  repo: "deb-src http://dl.ajaxplorer.info/repos/apt stable main"
+    repo: "deb-src http://dl.ajaxplorer.info/repos/apt stable main"
     state: present
 
 - name: add pydio key 
   apt_key:
-  url: http://dl.ajaxplorer.info/repos/charles@ajaxplorer.info.gpg.key
-  state: present 
+    url: http://dl.ajaxplorer.info/repos/charles@ajaxplorer.info.gpg.key
+    state: present 
 
 - name: Install packages
   apt: pkg={{ item }} state=installed update_cache=yes

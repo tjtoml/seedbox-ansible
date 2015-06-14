@@ -1,16 +1,13 @@
 --- 
-- name: Add nzbdrone key
-  command: "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC"
+#- name: Add nzbdrone key
+#  command: "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC"
 
-- name: add nzbdrone repo
-  apt_repository: 
-    repo: "deb http://apt.sonarr.tv/ master main"
-    state: present  
-    
-- name: Install packages
-  apt: pkg={{ item }} state=installed update_cache=yes
-  with_items:
-    - nzbdrone
-	
+#- name: add nzbdrone repo
+#  apt_repository: 
+#    repo: "deb http://apt.sonarr.tv/ master main"
+#    state: present  
+- name: Install package
+  apt: name=nzbdrone state=present update_cache=yes
+
 - name: Apply config template
   template: src=sonarr.conf dest=/etc/init/sonarr.conf

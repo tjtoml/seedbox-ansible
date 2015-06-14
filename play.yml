@@ -16,10 +16,10 @@
     web_password: CHANGEME        
   roles:
      - common
-     - apache2
+     - nginx
      - mysql
-     - xmlrpc
      - pydio
+     - xmlrpc
      - libtorrent
      - rTorrent
      - ruTorrent  

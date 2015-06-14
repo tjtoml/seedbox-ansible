@@ -6,9 +6,9 @@
 - name: Install packages
   apt: pkg={{ item }} state=installed update_cache=yes
   with_items:
-	- nginx
-	- ssl-cert
-	- php5
+    - nginx
+    - ssl-cert
+    - php5
     - php5-fpm
     - php5-curl
     - php5-gd
