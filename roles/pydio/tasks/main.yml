@@ -38,17 +38,17 @@
   # file: path=/var/www/pydio/data/plugins/boot.conf/ state=directory mode=0775 owner=www-data group=www-data 
 
 - name: Write encoding file
-  copy: dest=/var/www/pydio/data/plugins/boot.conf/encoding.php src=encoding.php 
+  copy: dest=/usr/share/pydio/data/plugins/boot.conf/encoding.php src=encoding.php 
 
 - name: Write bootstrap.json
-  template: src=bootstrap.json dest=/var/www/pydio/data/plugins/boot.conf/bootstrap.json 
+  template: src=bootstrap.json dest=/usr/share/pydio/data/plugins/boot.conf/bootstrap.json 
 
 
 - name: import database schema
   mysql_db:
     name: "{{ mysql_db_name }}"
     state: import
-    target: /var/www/pydio/plugins/log.sql/create.mysql
+    target: /usr/share/pydio/plugins/log.sql/create.mysql
     login_user: "{{ mysql_db_user }}"
     login_password: "{{ mysql_db_user_pass }}"  
 
@@ -56,16 +56,7 @@
   mysql_db:
     name: "{{ mysql_db_name }}"
     state: import
-    target: /var/www/pydio/plugins/auth.sql/create.mysql
-    login_user: "{{ mysql_db_user }}"
-    login_password: "{{ mysql_db_user_pass }}"  
-
-
-- name: import database schema
-  mysql_db:
-    name: "{{ mysql_db_name }}"
-    state: import
-    target: /var/www/pydio/plugins/feed.sql/create.mysql
+    target: /usr/share/pydio/plugins/auth.sql/create.mysql
     login_user: "{{ mysql_db_user }}"
     login_password: "{{ mysql_db_user_pass }}"  
 
@@ -74,7 +65,16 @@
   mysql_db:
     name: "{{ mysql_db_name }}"
     state: import
-    target: /var/www/pydio/plugins/meta.syncable/create.mysql
+    target: /usr/share/pydio/plugins/feed.sql/create.mysql
+    login_user: "{{ mysql_db_user }}"
+    login_password: "{{ mysql_db_user_pass }}"  
+
+
+- name: import database schema
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: import
+    target: /usr/share/pydio/plugins/meta.syncable/create.mysql
     login_user: "{{ mysql_db_user }}"
     login_password: "{{ mysql_db_user_pass }}"  
 
@@ -82,7 +82,7 @@
   mysql_db:
     name: "{{ mysql_db_name }}"
     state: import
-    target: /var/www/pydio/plugins/conf.sql/create.mysql
+    target: /usr/share/pydio/plugins/conf.sql/create.mysql
     login_user: "{{ mysql_db_user }}"
     login_password: "{{ mysql_db_user_pass }}"  
 
@@ -99,21 +99,21 @@
   ignore_errors: yes
 
 - name: Ensure cache directory is there 
-  file: path=/var/www/pydio/data/cache state=directory mode=0775 owner=www-data group=www-data 
+  file: path=/usr/share/pydio/data/cache state=directory mode=0775 owner=www-data group=www-data 
 
-- name: Override first run
-  file: path=/var/www/pydio/data/cache/first_run_passed state=directory mode=0775 owner=www-data group=www-data 
+# - name: Override first run
+  # file: path=/usr/share/pydio/data/cache/first_run_passed state=directory mode=0775 owner=www-data group=www-data 
 
 - name: Create torrent directory in pydio web dir
   file:
-    path: /var/www/pydio/data/personal/{{ pydio_username }}/torrents
+    path: /usr/share/pydio/data/personal/{{ pydio_username }}/torrents
     mode: 0755
     owner: www-data
     group: www-data
     state: directory
 
 - name: Create directory structure
-  file: path=/var/www/pydio/data/personal/{{ pydio_username }}/torrents/{{ item }} state=directory 
+  file: path=/usr/share/pydio/data/personal/{{ pydio_username }}/torrents/{{ item }} state=directory 
   with_items: 
     - complete
     - complete/game
@@ -141,6 +141,6 @@
     - watch/tv
     - watch/tv/sonarr
 
-- name: Change /var/www/pydio permissions
-  file: path=/var/www/pydio state=directory mode=5775 owner=www-data group=www-data recurse=yes
+- name: Change /usr/share/pydio permissions
+  file: path=/usr/share/pydio state=directory mode=5775 owner=www-data group=www-data recurse=yes
   notify: restart apache2 
