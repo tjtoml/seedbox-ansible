@@ -98,9 +98,9 @@ protocol.pex.set = yes
 # decent hash checking rate.
 #hash_max_tries = 10
 
-#log.execute=/tmp/exec.log
-                                                                              
-execute.nothrow = rm,~/.rtorrent.sock
-network.scgi.open_local = /home/rtorrent/.rtorrent.sock
-schedule = socket_chmod,0,0,"execute=chmod,0660,~/.rtorrent.sock"
-schedule = socket_chgrp,0,0,"execute=chgrp,rtorrent-socket,~/.rtorrent.sock"
+log.execute=/tmp/exec.log
+scgi_port = 127.0.0.1:5000                                                                              
+#//execute.nothrow = rm,~/.rtorrent.sock
+#//network.scgi.open_local = /home/rtorrent/.rtorrent.sock
+#//schedule = socket_chmod,0,0,"execute=chmod,0660,~/.rtorrent.sock"
+#//schedule = socket_chgrp,0,0,"execute=chgrp,rtorrent-socket,~/.rtorrent.sock"

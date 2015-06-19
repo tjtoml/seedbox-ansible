@@ -10,17 +10,17 @@
     domain: lugnuthead.me
     hostname: '{{ inventory_hostname }}'
     https_port: 443
-    run_user: rtorrent
+    run_user: www-data
     session_password: RANDOMSTRINGOFTEXT        
     web_user: tjtoml
     web_password: CHANGEME        
   roles:
-    - common
-    - nginx
-    - mysql
-    - pydio
-    - xmlrpc
-    - libtorrent
+#    - common
+    #- nginx
+    #- mysql
+    #- pydio
+    #- xmlrpc
+    #- libtorrent
     - rTorrent
     - ruTorrent  
     - sonarr 

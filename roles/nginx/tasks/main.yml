@@ -1,7 +1,11 @@
 # nginx
 ---
+
 - name: Add php5 PPA
   apt_repository: repo='ppa:ondrej/php5'
+
+- name: Add nginx PPA
+  apt_repository: repo='ppa:nginx/stable'
 
 - name: Install packages
   apt: pkg={{ item }} state=installed update_cache=yes
@@ -21,13 +25,14 @@
 
 - name: turn off PHP output buffering
   ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
-
-#- name: set cgi.fix_pathinfo
-#  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off 
+  notify: start php5-fpm
+  notify: restart nginx
+#- name: set cgi.fix_pathinfo ## Not sure if I need this, or what it needs to be set to. Opinions differ.
+#  ini_file: dest=/etc/php5/fpm/php.ini section=PHP option=output_buffering value=Off #this is at least partially wrong
 
 - name: Apply config template
   template:
-    src: nginx-ssl.conf
+    src: works.conf
     dest: "/etc/nginx/sites-available/{{ inventory_hostname }}"
 
 - name: Enable nginx conf

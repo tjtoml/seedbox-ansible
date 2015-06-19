@@ -31,18 +31,18 @@
 - name: ldconfig
   command: "/sbin/ldconfig"
 
-- name: Create group
-  group:
-    name: "{{ run_user }}"
-    state: present 
+#- name: Create group
+  #group:
+    #name: "{{ run_user }}"
+    #state: present 
 
-- name: Create user
-  user: 
-    name: "{{ run_user }}"
-    system: yes
-    home: /etc/rtorrent
-    group: "{{ run_user }}"
-    groups: www-data        
+#- name: Create user
+  #user: 
+    #name: "{{ run_user }}"
+##    system: yes
+    #home: /etc/rtorrent
+##    group: "{{ run_user }}"
+    #groups: www-data        
 
 - name: Create config directory /etc/rtorrent
   file:
@@ -56,6 +56,9 @@
   template:
     src: rtorrent.rc
     dest: /etc/rtorrent/rtorrent.rc
+    owner: "{{ run_user}}"
+    group: "{{ run_user}}"
+
 
 
 - name: Create session directory

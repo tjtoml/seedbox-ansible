@@ -1,25 +1,38 @@
 ---
-- name: copy ruTorrent update script
-  copy: src=update-rutorrent dest=/usr/local/bin/update-rutorrent mode=0777 force=yes
 
-- name: Make ruTorrent directory
-  file:
-    name: /var/www/rutorrent/plugins
-    state: directory 
+#- name: copy ruTorrent update script
+  #copy: src=update-rutorrent dest=/usr/local/bin/update-rutorrent mode=0777 force=yes
 
-- name: Download ruTorrent to /var/www/rutorrent
-  command: /usr/local/bin/update-rutorrent
-  args:
-    creates: /var/www/rutorrent/conf
+#- name: Make ruTorrent directory
+  #file:
+    #name: /var/www/rutorrent/plugins
+    #state: directory 
+
+#- name: Download ruTorrent to /var/www/rutorrent
+  #command: /usr/local/bin/update-rutorrent
+  #args:
+    #creates: /var/www/rutorrent/conf
+
+- name: Checkout ruTorrent from subversion
+  subversion:
+    repo: "https://github.com/Novik/ruTorrent/trunk/"
+    dest: /usr/share/pydio/rutorrent
+  ignore_errors: yes
 
 - name: Apply config template
-  template: src=config.php dest=/var/www/rutorrent/conf/config.php owner=www-data group=www-data 
+  template: src=config.php dest=/usr/share/pydio/rutorrent/conf/config.php owner=www-data group=www-data 
 
 - name: Copy autowatch config file
   copy: src=autotools-conf.php dest=/var/www/rutorrent/plugins/autotools/conf.php force=yes 
-  
-- name: Copy autowatch config file
-  copy: src=screenshots-conf.php dest=/var/www/rutorrent/plugins/screenshots/conf.php force=yes 
+ 
+- name: ffmpeg ppa
+  apt_repository: repo='ppa:mc3man/trusty-media'
+
+- name: install ffmpeg
+  apt: name=ffmpeg state=installed update_cache=yes
+
+#- name: Copy screenshots config file
+#  copy: src=screenshots-conf.php dest=/var/www/rutorrent/plugins/screenshots/conf.php force=yes 
 
 - name: Copy unpack config file 
   copy: src=unpack-conf.php dest=/var/www/rutorrent/plugins/unpack/conf.php force=yes 
